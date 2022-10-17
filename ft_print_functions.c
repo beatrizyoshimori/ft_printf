@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_functions.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: byoshimo <byoshimo@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 22:25:54 by byoshimo          #+#    #+#             */
+/*   Updated: 2022/10/17 23:32:54 by byoshimo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_printf.h"
 
@@ -87,7 +98,7 @@ int	ft_print_hex(unsigned long n, char c, char hash)
 
 int	ft_print_ptr(unsigned long ptr, char plus, char space)
 {
-	int	count;
+	int		count;
 	char	*hex;
 
 	hex = ft_strdup("0123456789abcdef");
@@ -108,7 +119,7 @@ int	ft_print_ptr(unsigned long ptr, char plus, char space)
 		count += write(1, &hex[ptr % 16], 1);
 		return (free(hex), count);
 	}
-	count += ft_print_ptr(ptr/ 16, plus, space);
+	count += ft_print_ptr(ptr / 16, plus, space);
 	count += write(1, &hex[ptr % 16], 1);
 	return (free(hex), count);
 }

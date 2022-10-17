@@ -6,50 +6,52 @@
 /*   By: byoshimo <byoshimo@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 22:08:52 by byoshimo          #+#    #+#             */
-/*   Updated: 2022/10/16 03:21:28 by byoshimo         ###   ########.fr       */
+/*   Updated: 2022/10/17 23:44:33 by byoshimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char *ft_get_flags(const char *str_flags, char c, char *flags)
+t_flags_types	ft_get_flags(t_flags_types flag, char c, const char *str)
 {
-	while (*str_flags != c)
+	while (*str != c)
 	{
-		if (*str_flags == '#')
-			flags[0] = '#';
-		else if (*str_flags == ' ')
-			flags[1] = ' ';
-		else if (*str_flags == '+')
-			flags[2] = '+';
-		str_flags++;
+		if (*str == '#')
+			flag.hash = '#';
+		else if (*str == ' ')
+			flag.space = ' ';
+		else if (*str == '+')
+			flag.plus = '+';
+		str++;
 	}
-	return(flags);
+	return (flag);
 }
 
-static int	ft_print_argument(const char *str_flags, char c, va_list ap)
+static int	ft_print_argument(const char *str, char c, va_list ap)
 {
-	int	count;
-	char *flags;
+	int				count;
+	t_flags_types	flag;
 
 	count = 0;
-	flags = ft_strdup("***");
-	flags = ft_get_flags(str_flags, c, flags);
+	flag.hash = '*';
+	flag.space = '*';
+	flag.plus = '*';
+	flag = ft_get_flags(flag, c, str);
 	if (c == 'c')
 		count += ft_print_char(va_arg(ap, int));
 	else if (c == 's')
 		count += ft_print_str(va_arg(ap, char *));
 	else if (c == 'p')
-		count += ft_print_ptr(va_arg(ap, unsigned long), flags[2], flags[1]);
+		count += ft_print_ptr(va_arg(ap, unsigned long), flag.plus, flag.space);
 	else if (c == 'd' || c == 'i')
-		count += ft_print_dec(va_arg(ap, int), flags[2], flags[1]);
+		count += ft_print_dec(va_arg(ap, int), flag.plus, flag.space);
 	else if (c == 'u')
 		count += ft_print_uns(va_arg(ap, unsigned int));
 	else if (c == 'x' || c == 'X')
-		count += ft_print_hex(va_arg(ap, unsigned int), c, flags[0]);
+		count += ft_print_hex(va_arg(ap, unsigned int), c, flag.hash);
 	else if (c == '%')
 		count += ft_print_char('%');
-	return (free(flags), count);
+	return (count);
 }
 
 int	ft_printf(const char *str, ...)
@@ -85,16 +87,16 @@ int	ft_printf(const char *str, ...)
 
 // int	main(void)
 // {
-// 	// char	ptr[5] = "12";
-// 	// char	c = 'c';
-// 	// int	i = 4445645;
-// 	// int	j = -1;
-// 	// long	k = 5012312;
+// 	char	ptr[5] = "12";
+// 	char	c = 'c';
+// 	int	i = 4445645;
+// 	int	j = -1;
+// 	long	k = 5012312;
 
-// 	// printf("%d\n", printf("%### + +#x *%# +u *%# +x*%# +s* *%# +c* *%# +p %+ #%\n", i, j, k, ptr, c, ptr));
-// 	// ft_printf("%d\n", ft_printf("%### + +#x *%# +u *%# +x*%# +s* *%# +c* *%# +p %+ #%\n", i, j, k, ptr, c, ptr));
+// 	printf("%d\n", printf("%### + +#x *%#         u *%# +x*%# +p* *%# +c* *% +++ +# +s %+ #%\n", i, j, k, ptr, c, "hfhf'\f&#/*9"));
+// 	ft_printf("%d\n", ft_printf("%### + +#x *%#         +u *%# +x*%# +p* *%# +c* *% +++ +# +s %+ #%\n", i, j, k, ptr, c, "hfhf'\f&#/*9"));
 
-// 	ft_printf("%# d fdsafasdf %# +s\n", 214748364, "djsfiai");
-// 	printf("%d fsdafasd\n", 214748364);
+// 	// ft_printf("%d fdsafasdf %# +s\n", 214748364, "djsfiai");
+// 	// printf("%d fsdafasd\n", 214748364);
 // 	return (0);
 // }
