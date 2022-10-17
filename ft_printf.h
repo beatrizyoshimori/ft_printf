@@ -18,7 +18,7 @@
 #include <unistd.h>
 
 char	*ft_strdup(const char *src);
-//int		ft_printf(const char *, ...) __attribute__((format(printf, 1, 2)));
+char	*ft_strchr(char *s, int c);
 int		ft_printf(const char *, ...);
 int		ft_print_char(int c);  
 int		ft_print_str(char *str);
